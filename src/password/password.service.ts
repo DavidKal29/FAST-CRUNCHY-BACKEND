@@ -5,6 +5,7 @@ import { conectarDB } from '../../src/database/mongo.js';
 import { apiInstance } from '../../src/brevo/brevo.js';
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv"
+import {compare, hash} from "bcryptjs"
 
 dotenv.config()
 
@@ -41,6 +42,48 @@ export class PasswordService {
         } catch (error) {
             console.error(error)
             return {error:"Error al enviar el email"}
+        }
+    }
+
+    async changePassword(dto:ChangePasswordDTO, token:string){
+        try{
+            const db = await conectarDB()
+            const users = db.collection('users')
+
+            const decoded = jwt.verify(token,process.env.JWT_SECRET)
+            const email = decoded.email
+
+            const userData = await users.findOne({email:email, token:token})
+            
+            if (userData) {
+                
+                if (dto.new_password===dto.confirm_password) {  
+                    
+                    const password_equals = await compare(dto.new_password,userData.password)
+                        
+                    if (password_equals) {
+                        return {error:"La nueva contraseña no puede ser igual a la anterior"}
+                    }else{
+                        
+                        const new_encripted_password = await hash(dto.new_password,10)
+
+                        await users.updateOne({email:email},{$set:{password:new_encripted_password}})
+
+                        await users.updateOne({email:email},{$set:{token:''}})
+                            
+                        return {success:"Contraseña cambiada con éxito"}
+                    }
+                }else{
+                    
+                    return {error:"Contraseñas no coinciden"}
+                }
+            }else{
+                return {error:"Token inválido o expirado"}
+            }
+        }catch(error){
+            console.log(error);
+            
+            return {error:"Token inválido o erroneo"}
         }
     }
 }
