@@ -1,6 +1,7 @@
-const dotenv = require('dotenv').config()
+import dotenv from "dotenv";
+dotenv.config()
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+import { MongoClient, ServerApiVersion } from "mongodb";
 
 const uri = process.env.MONGO_URI
 
@@ -14,7 +15,7 @@ const client = new MongoClient(uri, {
 
 let db;
 
-const conectarDB = async () => {
+export const conectarDB = async () => {
   try {
 
     //Vemos si la conexión sigue activa
@@ -42,6 +43,3 @@ const conectarDB = async () => {
     
   }
 }
-
-
-module.exports = conectarDB
