@@ -3,7 +3,6 @@ import { conectarDB } from '../../src/database/mongo.js';
 import { hash,compare } from 'bcryptjs';
 import { RegisterDTO } from './dto/register.dto.js';
 import { LoginDTO } from './dto/login.dto.js';
-import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class AuthService {
