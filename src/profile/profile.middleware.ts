@@ -33,8 +33,6 @@ export class ProfileMiddleware implements NestMiddleware {
 
       req.user = userData
 
-      console.log('El req.user:',userData);
-
       next()
 
 

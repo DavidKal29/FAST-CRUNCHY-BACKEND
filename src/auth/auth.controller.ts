@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Res, Get } from '@nestjs/common';
 import { RegisterDTO } from './dto/register.dto';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
@@ -43,6 +43,21 @@ export class AuthController {
 
         return res.json(result)
         
+    }
+
+    @Get('logout')
+    async logout(@Res() res:Response){
+        try {
+            const result = await this.authService.logout()
+
+            res.clearCookie('token',cookieOptions)
+            
+            return res.json(result)   
+        } catch (error) {
+            
+            return res.json({error:'Error al cerrar sesión'})
+        }
+
     }
 
 }

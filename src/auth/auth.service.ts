@@ -60,9 +60,17 @@ export class AuthService {
             console.log('Error al loguear usuario');
 
             return {error:'Error al loguear usuario'} 
-        }
-        
+        }   
+    }
 
+    async logout(){
+        try {
+            
+            return {success:'Sesión cerrada con éxito'}
+        } catch (error) {
+            
+            return {error:'Error al cerrar sesión'}
+        }
     }
 
 }

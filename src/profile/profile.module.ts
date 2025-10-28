@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
 import { ProfileController } from './profile.controller';
 import { ProfileService } from './profile.service';
 import { ProfileMiddleware } from './profile.middleware';
@@ -11,6 +11,9 @@ export class ProfileModule implements NestModule  {
     configure(consumer:MiddlewareConsumer){
         consumer
             .apply(ProfileMiddleware)
-            .forRoutes(ProfileController)
+            .forRoutes(
+                ProfileController,
+                {path:'auth/logout', method:RequestMethod.ALL}
+            )
     }
 }
