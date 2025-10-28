@@ -13,12 +13,18 @@ export class ProfileMiddleware implements NestMiddleware {
       const token = req.cookies?.token
 
       if (!token) {
+        console.log('Token inexistente');
+        
         return res.status(401).json({error:'Error de autenticación'})
       }
 
+      console.log('Token obtenido');
+      
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-      const userID = decoded.UserID
+      console.log(decoded);
+      
+      const userID = decoded.userID
 
       const db = await conectarDB()
       const users = await db.collection('users')
@@ -27,10 +33,14 @@ export class ProfileMiddleware implements NestMiddleware {
 
       req.user = userData
 
+      console.log('El req.user:',userData);
+
       next()
 
 
     } catch (error) {
+      console.log('Error de verificación de token');
+      
       return res.status(401).json({error:'Error de autenticación'})
     }
   }

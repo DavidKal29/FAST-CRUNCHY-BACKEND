@@ -12,7 +12,7 @@ export class ProfileController {
         const result  = this.profileService.profile()
 
         if (result.success) {
-            return {user:req.user}
+            return {success:'Usuario logueado',user:req.user}
         }
     }
 
