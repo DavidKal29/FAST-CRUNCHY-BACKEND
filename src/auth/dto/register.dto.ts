@@ -6,7 +6,10 @@ export class RegisterDTO {
     email: string;
 
     @IsString()
-    username: string;
+    name: string;
+
+    @IsString()
+    lastname: string;
 
     @Matches(/^\d+$/, { message: 'phone must contain only digits' })
     phone: string;

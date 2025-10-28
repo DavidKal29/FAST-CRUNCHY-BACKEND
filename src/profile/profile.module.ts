@@ -11,6 +11,6 @@ export class ProfileModule implements NestModule  {
     configure(consumer:MiddlewareConsumer){
         consumer
             .apply(ProfileMiddleware)
-            .forRoutes('*')
+            .forRoutes(ProfileController)
     }
 }
