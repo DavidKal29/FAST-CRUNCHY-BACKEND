@@ -7,10 +7,13 @@ import { AuthController } from './auth/auth.controller';
 import { PasswordController } from './password/password.controller';
 import { PasswordService } from './password/password.service';
 import { PasswordModule } from './password/password.module';
+import { ProfileController } from './profile/profile.controller';
+import { ProfileService } from './profile/profile.service';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
-  imports: [AuthModule, PasswordModule],
-  controllers: [AppController, AuthController, PasswordController],
-  providers: [AppService, AuthService, PasswordService],
+  imports: [AuthModule, PasswordModule, ProfileModule],
+  controllers: [AppController, AuthController, PasswordController, ProfileController],
+  providers: [AppService, AuthService, PasswordService, ProfileService],
 })
 export class AppModule {}
