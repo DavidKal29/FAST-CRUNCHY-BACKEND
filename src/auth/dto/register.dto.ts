@@ -1,4 +1,4 @@
-import { IsString, IsEmail, Matches } from "class-validator";
+import { IsString, IsEmail, Matches,IsOptional } from "class-validator";
 
 
 export class RegisterDTO {
@@ -14,6 +14,7 @@ export class RegisterDTO {
     @Matches(/^\d+$/, { message: 'phone must contain only digits' })
     phone: string;
 
+    @IsOptional()
     @IsString()
     password: string;
 
