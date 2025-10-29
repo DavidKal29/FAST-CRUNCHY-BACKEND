@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {conectarDB} from '../../src/database/mongo.js'
 import { EditProfileDTO } from './dto/editProfile.js';
+import { AddressDTO } from './dto/address.js';
 import { ObjectId } from 'mongodb';
 import { Request } from 'express';
 
@@ -35,11 +36,139 @@ export class ProfileService {
             
             return {error:'Error al editar perfil'}
         }
-
-        
-
-
-
         
     }
+    async getAddress(req:Request, id_address:string){
+        try {
+            const db = await conectarDB()
+            const addresses = db.collection('addresses')
+
+            const userID = req.user?._id
+
+            const address_exists = await addresses.findOne({id_user:new ObjectId(userID), _id:new ObjectId(id_address)})
+
+            if (address_exists) {
+                console.log(address_exists);
+                
+                return {address:address_exists}
+            }else{
+                return {error:'La dirección no existe'}
+            }       
+            
+        } catch (error) {
+            console.log(error);
+            
+            return {error:'Error al obtener direccion'}   
+        }
+    }
+
+    async myAddresses(req:Request){
+        try {
+            const db = await conectarDB()
+            const addresses = db.collection('addresses')
+
+            const userID = req.user?._id
+
+            const address_exists = await addresses.find({id_user:new ObjectId(userID)}).toArray()
+
+            if (address_exists) {
+                return {addresses:address_exists}
+            }else{
+                return {addresses:[]}
+            }       
+            
+        } catch (error) {
+            console.log(error);
+            
+            return {error:'Error al obtener direcciones'}   
+        }
+    }
+
+    async addAddress(req:Request, dto:AddressDTO){
+        try {
+            const db = await conectarDB()
+            const addresses = db.collection('addresses')
+
+            const userID = req.user?._id
+
+            const address_exists = await addresses.findOne({
+                id_user:new ObjectId(userID),
+                name:dto.name,
+                address:dto.address
+            })
+
+            if (address_exists) {
+                return {error:'Esa dirección ya existe'}
+            }
+
+            await addresses.insertOne({id_user: new ObjectId(userID), name:dto.name, address:dto.address})
+
+            return {success:'Dirección añadida correctamente'}
+            
+        } catch (error) {
+            console.log(error);
+            
+            return {error:'Error al añadir dirección'}   
+        }
+    }
+
+    async editAddress(req:Request, dto:AddressDTO, id_address:string){
+        try {
+            const db = await conectarDB()
+            const addresses = db.collection('addresses')
+
+            const userID = req.user?._id
+
+            const address_exists = await addresses.findOne({
+                id_user:new ObjectId(userID),
+                _id:new ObjectId(id_address)
+            })
+
+            if (!address_exists) {
+                return {error:'Esa dirección no existe'}
+            }
+
+            const result = await addresses.updateOne({id_user: new ObjectId(userID),_id:new ObjectId(id_address)},{$set:{name:dto.name,address:dto.address}})
+
+            if (result.modifiedCount===0) {
+                return {error:'Asegurate de poner al menos un campo distinto'}
+            }
+
+            return {success:'Dirección editada correctamente'}
+            
+        } catch (error) {
+            console.log(error);
+            
+            return {error:'Error al editar dirección'}   
+        }
+    }
+
+
+    async deleteAddress(req:Request,id_address:string){
+        try {
+            const db = await conectarDB()
+            const addresses = db.collection('addresses')
+
+            const userID = req.user?._id
+
+            const address_exists = await addresses.findOne({id_user:new ObjectId(userID),_id:new ObjectId(id_address)})
+
+            if (address_exists) {
+                await addresses.deleteOne({_id:new ObjectId(id_address)})
+
+                return {success:'Dirección borrada con éxito'}
+            }else{
+                console.log('Dirección inexistente');
+                
+                return {error:'La dirección que intentas eliminar no existe'}
+            }       
+            
+        } catch (error) {
+            console.log(error);
+            
+            return {error:'Error al eliminar la dirección'}   
+        }
+    }
+
+
 }
