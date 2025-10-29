@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {conectarDB} from '../../src/database/mongo.js'
-import { RegisterDTO } from 'src/auth/dto/register.dto.js';
+import { EditProfileDTO } from './dto/editProfile.js';
 import { ObjectId } from 'mongodb';
 import { Request } from 'express';
 
@@ -10,7 +10,7 @@ export class ProfileService {
         return {success:'Entraste a perfil'}
     }
 
-    async editProfile(req:Request, dto:RegisterDTO){
+    async editProfile(req:Request, dto:EditProfileDTO){
         try {
             const db = await conectarDB()
             const users = db.collection('users')

@@ -1,6 +1,6 @@
 import { Controller,Get,Req,Post,Body } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { RegisterDTO } from 'src/auth/dto/register.dto';
+import { EditProfileDTO } from './dto/editProfile';
 import type { Request } from 'express';
 
 @Controller('profile')
@@ -18,7 +18,7 @@ export class ProfileController {
     }
 
     @Post('editProfile')
-    editProfile(@Req() req:Request, @Body() dto:RegisterDTO){
+    editProfile(@Req() req:Request, @Body() dto:EditProfileDTO){
         return this.profileService.editProfile(req,dto)
     }
 

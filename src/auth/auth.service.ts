@@ -49,10 +49,10 @@ export class AuthService {
                 if (match) {
                     return {success:'Usuario logueado con éxito', userID:user_exists._id}
                 }else{
-                    return {error:'Email correcto pero contraseña incorrecta'} 
+                    return {error:'Contraseña Incorrecta'} 
                 }
             }else{
-                return {error:'Email no registrado en la db'} 
+                return {error:'Email Incorrecto'} 
             }
 
             
