@@ -101,14 +101,61 @@ export class ProfileService {
                 return {error:'Esa dirección ya existe'}
             }
 
-            await addresses.insertOne({id_user: new ObjectId(userID), name:dto.name, address:dto.address})
+            const user_addresses = await addresses.find({id_user:new ObjectId(userID)}).toArray()
 
+            let predetermined;
+
+            if (user_addresses.length>0) {
+                predetermined = false
+            }else{
+                predetermined = true
+            }
+
+            await addresses.insertOne({id_user: new ObjectId(userID), name:dto.name, address:dto.address, predetermined: predetermined})
+            
             return {success:'Dirección añadida correctamente'}
             
         } catch (error) {
             console.log(error);
             
             return {error:'Error al añadir dirección'}   
+        }
+    }
+
+    async predeterminateAddress(req:Request, id_address:string){
+        try {
+            const db = await conectarDB()
+            const addresses = db.collection('addresses')
+
+            const userID = req.user?._id
+
+            const selectedAddress = await addresses.findOne({
+                id_user: new ObjectId(userID),
+                _id: new ObjectId(id_address),
+                predetermined: false
+            })
+
+            if (!selectedAddress) {
+                return {error:'La dirección que intentas cambiar es inexistente'}
+            }
+
+            const predeterminedAddress = await addresses.findOne({
+                id_user: new ObjectId(userID),
+                predetermined: true
+            })
+
+            if (predeterminedAddress) {
+                await addresses.updateOne({_id: new ObjectId(predeterminedAddress._id)},{$set:{predetermined:false}})
+            }
+
+            await addresses.updateOne({_id: new ObjectId(id_address)},{$set:{predetermined:true}})
+            
+            return {success:'Dirección predeterminada, cambiada con éxito'}
+            
+        } catch (error) {
+            console.log(error);
+            
+            return {error:'Error al cambiar la dirección'}   
         }
     }
 
@@ -155,6 +202,16 @@ export class ProfileService {
 
             if (address_exists) {
                 await addresses.deleteOne({_id:new ObjectId(id_address)})
+
+                const predeterminedAdddressExists = await addresses.findOne({id_user:new ObjectId(userID), predetermined:true})
+
+                if (!predeterminedAdddressExists) {
+                    //Le pasa el predeterminado a la primera dirección 
+                    // que encuentre, solo si no existe una dirección predeterminada
+                    await addresses.updateOne({id_user:new ObjectId(userID)},{$set:{predetermined:true}})
+                }
+
+                
 
                 return {success:'Dirección borrada con éxito'}
             }else{

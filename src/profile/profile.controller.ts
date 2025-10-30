@@ -38,6 +38,11 @@ export class ProfileController {
         return this.profileService.addAddress(req,dto)
     }
 
+    @Get('predeterminateAddress/:id_address')
+    predeterminateAddress(@Req() req:Request, @Param('id_address') id_address:string){
+        return this.profileService.predeterminateAddress(req,id_address)
+    }
+
     @Post('editAddress/:id_address')
     editAddress(@Req() req:Request, @Body() dto:AddressDTO, @Param('id_address') id_address:string){
         return this.profileService.editAddress(req,dto,id_address)
