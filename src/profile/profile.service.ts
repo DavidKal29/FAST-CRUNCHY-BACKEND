@@ -206,8 +206,7 @@ export class ProfileService {
                 const predeterminedAdddressExists = await addresses.findOne({id_user:new ObjectId(userID), predetermined:true})
 
                 if (!predeterminedAdddressExists) {
-                    //Le pasa el predeterminado a la primera dirección 
-                    // que encuentre, solo si no existe una dirección predeterminada
+                    //Le pasa el predeterminado a la primera dirección que encuentre, solo si no existe una dirección predeterminada
                     await addresses.updateOne({id_user:new ObjectId(userID)},{$set:{predetermined:true}})
                 }
 

@@ -10,10 +10,13 @@ import { PasswordModule } from './password/password.module';
 import { ProfileController } from './profile/profile.controller';
 import { ProfileService } from './profile/profile.service';
 import { ProfileModule } from './profile/profile.module';
+import { ProductsService } from './products/products.service';
+import { ProductsController } from './products/products.controller';
+import { ProductsModule } from './products/products.module';
 
 @Module({
-  imports: [AuthModule, PasswordModule, ProfileModule],
-  controllers: [AppController, AuthController, PasswordController, ProfileController],
-  providers: [AppService, AuthService, PasswordService, ProfileService],
+  imports: [AuthModule, PasswordModule, ProfileModule, ProductsModule],
+  controllers: [AppController, AuthController, PasswordController, ProfileController, ProductsController],
+  providers: [AppService, AuthService, PasswordService, ProfileService, ProductsService],
 })
 export class AppModule {}
