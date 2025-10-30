@@ -28,10 +28,19 @@ export class ProfileMiddleware implements NestMiddleware {
 
       const db = await conectarDB()
       const users = await db.collection('users')
+      const addresses = await db.collection('addresses')
 
       const userData = await users.findOne({_id:new ObjectId(userID)})
 
       req.user = userData
+
+      const predeterminedAddress = await addresses.findOne({id_user: new ObjectId(userID), predetermined:true})
+
+      if (predeterminedAddress) {
+        req.user = {...userData,address:predeterminedAddress}
+      }
+
+      
 
       next()
 
