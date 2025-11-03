@@ -3,7 +3,8 @@ import {conectarDB} from '../../src/database/mongo.js'
 import { EditProfileDTO } from './dto/editProfile.js';
 import { AddressDTO } from './dto/address.js';
 import { ObjectId } from 'mongodb';
-import { Request } from 'express';
+import { Request,Response } from 'express';
+import { cookieOptions } from '../../src/cookieOptions/cookieOptions.js';
 
 @Injectable()
 export class ProfileService {
@@ -224,6 +225,33 @@ export class ProfileService {
             
             return {error:'Error al eliminar la dirección'}   
         }
+    }
+
+    async deleteProfile(req:Request, res:Response){
+        try {
+            const db = await conectarDB()
+            const users = db.collection('users')
+            const addresses = db.collection('addresses')
+            const orders = db.collection('orders')
+            const userID = req.user?._id
+
+            await addresses.deleteMany({id_user: new ObjectId(userID)})
+
+            await orders.deleteMany({id_user: new ObjectId(userID)})
+
+            await users.deleteOne({_id:new Object(userID)})
+
+            res.clearCookie('token',cookieOptions)
+
+            return res.json({success:'Perfil eliminado'})
+
+        } catch (error) {
+            console.log(error);
+            
+            return {error:'Error al eliminar el perfil'}   
+        }
+
+
     }
 
 

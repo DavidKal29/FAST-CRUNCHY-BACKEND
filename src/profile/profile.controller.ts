@@ -1,8 +1,8 @@
-import { Controller,Get,Req,Post,Body,Param } from '@nestjs/common';
+import { Controller,Get,Req,Post,Body,Param,Res } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { EditProfileDTO } from './dto/editProfile';
 import { AddressDTO } from './dto/address';
-import type { Request } from 'express';
+import type { Request, Response } from 'express';
 
 @Controller('profile')
 export class ProfileController {
@@ -51,6 +51,11 @@ export class ProfileController {
     @Get('deleteAddress/:id_address')
     deleteAddress(@Req() req:Request, @Param('id_address') id_address:string){
         return this.profileService.deleteAddress(req,id_address)
+    }
+
+    @Get('deleteProfile')
+    deleteProfile(@Req() req:Request, @Res() res:Response){
+        return this.profileService.deleteProfile(req,res)
     }
 
 
