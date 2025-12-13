@@ -15,7 +15,7 @@ export class AuthService {
             const user_exists = await users.findOne({email:dto.email})
 
             if (user_exists) {
-                return {error:'Email o Username ya están en uso por otro usuario'}
+                return {error:'Email ya está en uso por otro usuario'}
             }
 
             const encripted_password = await hash(dto.password, 10)
