@@ -21,6 +21,87 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+
+# Fast&Crunchy
+
+Esta es una **API/backend** para una aplicación de **pedido de comida rápida online** llamada **Fast&Crunchy**, diseñada para ofrecer funcionalidades completas de **autenticación, gestión de usuarios, direcciones, productos y pedidos**, siendo **robusta, segura y escalable**.
+
+⚠️ **Dependencia:** Esta aplicación está construida para ser consumida por el frontend de Fast&Crunch. 
+
+---
+
+### Funcionalidades para la API:
+
+- **Autenticación completa**: registro, login y recuperación de contraseña mediante **JWT**.
+- **Gestión de usuarios**:
+  - Crear, editar y eliminar cuentas de usuario.
+  - Visualización de perfil.
+- **Gestión de direcciones**:
+  - Crear, editar, eliminar direcciones.
+  - Seleccionar dirección activa para pedidos.
+- **Gestión de productos**:
+  - Hamburguesas, pizzas, tacos, kebabs, complementos, postres y bebidas.
+  - Soporte para ingredientes obligatorios y opcionales.
+- **Personalización avanzada de productos**:
+  - Eliminar ingredientes no obligatorios.
+  - Añadir o quitar extras según el producto.
+- **Gestión de pedidos**:
+  - Crear pedidos.
+  - Ver historial de pedidos.
+  - Eliminar pedidos.
+  - Repetir pedidos (recarga completa del carrito desde el backend).
+  - Opción de pedido **a domicilio** o **recogida en local**.
+- **Modo invitado**:
+  - Acceso limitado sin autenticación completa.
+  - Login obligatorio para realizar pedidos.
+- **Protección de rutas** mediante **JWT** y **Cookies**.
+- **Middleware de seguridad**:
+  - Manejo de cookies y JWT. Es necesario estar logueado para ciertas rutas, sino el middleware no lo permite.
+- **Validación de datos** usando `class-validator` y `class-transformer`.
+- **CORS habilitado**, preparado para trabajar con frontend externo.
+- **Envío de emails automáticos**:
+  - Recuperación de contraseña.
+  - Usando el servicio de **Brevo** (`@getbrevo/brevo`).
+
+---
+
+### Variables de entorno
+Crea un archivo `.env` en la raíz del proyecto y añade tus propios datos:
+
+```bash
+MONGO_URI=
+FRONTEND_URL=
+JWT_SECRET=
+APIKEY= (Asegurate de tener cuenta en Brevo y tener la apikey válida)
+CORREO=
+PORT=
+```
+
+### Requisitos
+
+Para ejecutar este proyecto necesitas:
+
+- **Node.js >= 18.x**
+- **MongoDB** (local o en la nube)
+- Paquetes incluidos en `package.json`:
+  - `@nestjs/common`
+  - `@nestjs/core`
+  - `@nestjs/platform-express`
+  - `mongodb`
+  - `jsonwebtoken`
+  - `bcryptjs`
+  - `cookie-parser`
+  - `csurf`
+  - `class-validator`
+  - `class-transformer`
+  - `dotenv`
+  - `@getbrevo/brevo`
+  - `rxjs`
+
+---
+
+
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
