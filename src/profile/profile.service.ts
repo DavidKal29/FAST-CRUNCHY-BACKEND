@@ -19,7 +19,7 @@ export class ProfileService {
 
             const userID = req.user?._id
 
-            const user_exists = await users.findOne({email:dto.email})
+            const user_exists = await users.findOne({email:dto.email,_id:{$ne:new ObjectId(userID)}})
 
             if (user_exists) {
                 return {error:'Email ya está en uso por otro usuario'}
